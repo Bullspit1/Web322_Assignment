@@ -9,6 +9,8 @@
   "author": "Stephen Ditta",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^4.5.2",
+    "bootstrap-icons": "^1.0.0",
     "express": "^4.17.1"
   }
 }
