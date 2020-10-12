@@ -1,0 +1,17 @@
+.my-container {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+img {
+    width: 100%;
+    max-height: 40em;
+    object-fit: cover;
+}
+
+.bottom-left {
+    position: absolute;
+  bottom: 8px;
+  left: 16px;
+}

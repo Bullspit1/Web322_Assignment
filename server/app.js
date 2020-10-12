@@ -14,5 +14,14 @@ app.get("/", function(req,res){
     res.sendFile(path.join(__dirname,"../client/html/home_page.html"));
   });
 
+  app.get("/roomlisting", function(req,res){
+    app.use(express.static('../client'));
+    res.sendFile(path.join(__dirname,"../client/html/registration_page.html"));
+  });
+
+  app.get("/registration", function(req,res){
+    app.use(express.static('../client'));
+    res.sendFile(path.join(__dirname,"../client/html/room_listing_page.html"));
+  });
 
 app.listen(HTTP_PORT, onHttpStart);
