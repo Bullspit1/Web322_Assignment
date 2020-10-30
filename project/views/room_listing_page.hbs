@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
 
-    <link rel="stylesheet" href="./css/home_page.css">
-    <script type="text/javascript" src="../js/home_page.js"></script>
+    <link rel="stylesheet" href="css/room_listing_page.css">
+    <script type="text/javascript" src="js/room_listing_page.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
@@ -18,8 +18,8 @@
 </head>
 <body>
     <!-- Nav bar -->
-    <div class="nav-container">
-    <nav class="navbar fixed-top navbar-expand-sm navbar-light opacity">
+    {{!-- <div class="nav-container"> --}}
+    <nav class="navbar fixed-top navbar-expand-sm navbar-light">
         <a class="navbar-brand" href="/">
             A Place To Stay
           </a>
@@ -32,7 +32,7 @@
               <a class="nav-link" href="/">Home</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="/roomlisting">Room Listing<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/roomlisting">Room Listing <span class="sr-only">(current)</span></a>
               </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sign up / Login</a>
@@ -44,19 +44,40 @@
           </ul>
         </div>
       </nav>
-    </div>
+    {{!-- </div> --}}
     <!-- End Nav Bar -->
 
+    <!-- Content -->
+<div class="container white-container">
+  <h4>Rooms</h4>
+  {{!-- <div class="row"> --}}
+  <div class="card-columns">
 
-<!-- Content -->
+{{#each data}}
+  {{!-- <div class="col-md-4"> --}}
+    <div class="card p-3">
+      <img class="card-img-top" src={{img}} alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{name}}</h5>
+        <p class="card-text">{{desc}}</p>
+      </div>
+      <div class="card-footer">
+        <small class="text-muted">${{price}} CAD/night</small>
+      </div>
+    </div>
+  {{!-- </div> --}}
+{{/each}}
 
-<li>{{empData.[0].name}}</li>
-<!-- End Content -->
+  </div>
+  </div>
+</div>
+  
 
+    <!-- End Content -->
 
 <!-- Footer -->
 <div class="white-container nobot">
-<footer class="page-footer font-small mdb-color pt-4" style="margin-top: 5vw;">
+<footer class="page-footer font-small mdb-color pt-4">
 
   <hr>
 
@@ -126,7 +147,7 @@
   </div>
 </footer>
 </div>
-<!-- Footer -->
+<!-- End Footer -->
     
 
 </body>

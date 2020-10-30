@@ -1,0 +1,39 @@
+
+[
+    {
+        "name": "Room 1",
+        "price": 150,
+        "img": "../images-videos/room1.jpg",
+        "desc": "Phasellus eros dolor, bibendum eu diam pharetra, commodo porta felis. Fusce non dictum urna, vitae tempus nunc. Vestibulum vel dictum libero, ut pellentesque arcu."
+    },
+    {
+        "name": "Room 2",
+        "price": 130,
+        "img": "../images-videos/room2.jpg",
+        "desc": "Phasellus eros dolor, bibendum eu diam pharetra, commodo porta felis. Fusce non dictum urna, vitae tempus nunc. Vestibulum vel dictum libero, ut pellentesque arcu."
+    },
+    {
+        "name": "Room 3",
+        "price": 125,
+        "img": "../images-videos/room3.jpg",
+        "desc": "Phasellus eros dolor, bibendum eu diam pharetra, commodo porta felis. Fusce non dictum urna, vitae tempus nunc. Vestibulum vel dictum libero, ut pellentesque arcu."
+    },
+    {
+        "name": "Room 4",
+        "price": 500,
+        "img": "../images-videos/room4.jpg",
+        "desc": "Phasellus eros dolor, bibendum eu diam pharetra, commodo porta felis. Fusce non dictum urna, vitae tempus nunc. Vestibulum vel dictum libero, ut pellentesque arcu."
+    },
+    {
+        "name": "Room 5",
+        "price": 170,
+        "img": "../images-videos/room5.jpg",
+        "desc": "Phasellus eros dolor, bibendum eu diam pharetra, commodo porta felis. Fusce non dictum urna, vitae tempus nunc. Vestibulum vel dictum libero, ut pellentesque arcu."
+    },
+    {
+        "name": "Room 6",
+        "price": 155,
+        "img": "../images-videos/room6.jpg",
+        "desc": "Phasellus eros dolor, bibendum eu diam pharetra, commodo porta felis. Fusce non dictum urna, vitae tempus nunc. Vestibulum vel dictum libero, ut pellentesque arcu."
+    }
+]

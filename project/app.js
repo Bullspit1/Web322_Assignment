@@ -5,6 +5,8 @@ var path = require("path");//path
 
 const exphbs = require('express-handlebars');//express-handlebars
 
+var room = require('./public/js/rooms.json'); //import rooms.json file
+
 var HTTP_PORT = process.env.PORT || 8080;
 
 function onHttpStart() {
@@ -23,23 +25,8 @@ app.get("/", function(req,res){ //home
   app.get("/roomlisting", function(req,res){ //roomlisting
     app.use(express.static('./public'));
 
-    var employee = [{
-      name: "James",
-      age: 50,
-      occupation: "developer",
-      company: "Scotiabank",
-      fulltime: true
-  },
-  {
-      name: "Sarah",
-      age: 32,
-      occupation: "manager",
-      company: "TD",
-      fulltime: false
-  }];
-
   res.render('room_listing_page', {
-      empData: employee,
+      data: room,
       layout: false // do not use the default Layout (main.hbs)
   });
 
