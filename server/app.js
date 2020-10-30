@@ -16,12 +16,18 @@ app.get("/", function(req,res){
 
   app.get("/roomlisting", function(req,res){
     app.use(express.static('../client'));
-    res.sendFile(path.join(__dirname,"../client/html/registration_page.html"));
+    res.sendFile(path.join(__dirname,"../client/html/room_listing_page.html"));
   });
 
   app.get("/registration", function(req,res){
     app.use(express.static('../client'));
-    res.sendFile(path.join(__dirname,"../client/html/room_listing_page.html"));
+    res.sendFile(path.join(__dirname,"../client/html/registration_page.html"));
   });
+
+  app.get("/login", function(req,res){
+    app.use(express.static('../client'));
+    res.sendFile(path.join(__dirname,"../client/html/login.html"));
+  });
+ 
 
 app.listen(HTTP_PORT, onHttpStart);
