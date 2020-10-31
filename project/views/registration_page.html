@@ -6,17 +6,21 @@
     <!-- Remove This its to refesh page<meta http-equiv="refresh" content="5" > -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="./css/registration_page.css">
-    <script type="text/javascript" src="../js/registration_page.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+
+    <link rel="stylesheet" href="css/registration_page.css">
+    <script type="text/javascript" src="js/registration_page.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>    <title>Home</title>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>    
+    <title>Registration</title>
 </head>
 <body>
     <!-- Nav bar -->
+    <div class="nav-container">
     <nav class="navbar fixed-top navbar-expand-sm navbar-light">
-        <!-- <a class="navbar-brand" href="/">Air BnB</a> -->
         <a class="navbar-brand" href="/">
             A Place To Stay
           </a>
@@ -26,16 +30,148 @@
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav nav-pills justify-content-end ml-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/">Home</a>
+              <a class="nav-link" href="/">Home </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/roomlisting">Room Listing</a>
               </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/registration">Log in / Sign up <span class="sr-only">(current)</span></a>
+            <li class="nav-item dropdown active">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sign up / Login <span class="sr-only">(current)</span></a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/registration">Sign Up</a>
+                <a class="dropdown-item" href="/login">Log In</a>
+              </div>
             </li>
           </ul>
         </div>
       </nav>
+    </div>
+    <!-- End Nav Bar -->
+
+
+<div class="container-sm white-container">
+  <form class="form-custom"> 
+    <h3>Sign Up</h3>
+    <div class="form-group">
+      <label for="email">Email address</label>
+      <input type="email" class="form-control" id="email" aria-describedby="enterEmail" required>
+    </div>
+    <div class="form-group">
+      <label for="firstName">First name</label>
+      <input type="text" class="form-control" id="firstName" value="" required>
+    </div>
+    <div class="form-group">
+      <label for="lastName">Last name</label>
+      <input type="text" class="form-control" id="lastName" value="" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" id="password" required>
+    </div>
+
+    <h5>Date of birth</h5>
+    <div class="form-row">
+      <div class="col-md-4 mb-3">
+      <label for="month">Month</label>
+      <select id="month" class="form-control" required>
+        <option value="" selected>Choose...</option>
+      </select>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="day">Day</label>
+        <select id="day" class="form-control" required>
+          <option value="" selected>Choose...</option>
+        </select>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label for="year">Year</label>
+          <select id="year" class="form-control" required>
+            <option value="" selected>Choose...</option>
+          </select>
+          </div>
+
+    </div>
+    <small class="form-text">All ready have an account log in <a href="/login">here</a></small>
+    <br>
+    <button type="submit" class="btn btn-lg btn-block" >Sign Up</button>
+  </form>
+</div>
+
+
+<!-- Footer -->
+<div class="white-container nobot">
+<footer class="page-footer font-small mdb-color pt-4">
+
+  <hr>
+
+  <div class="container text-center text-md-left">
+
+    <div class="row text-center text-md-left mt-3 pb-3">
+
+      <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+        <h6 class="text-uppercase mb-4 font-weight-bold">A Place To Stay</h6>
+        <p>Maecenas rhoncus nibh ut arcu vestibulum, pellentesque rhoncus tellus consequat. 
+          Proin aliquet a massa sit amet dictum. Aliquam erat volutpat.</p>
+      </div>
+
+      <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+        <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
+        <p>
+          <i class="fas fa-home mr-3"></i> Aurora, ON 2321, CA</p>
+        <p>
+          <i class="fas fa-envelope mr-3"></i> scditta@myseneca.ca</p>
+        <p>
+          <i class="fas fa-phone mr-3"></i> 905 333 2222</p>
+      </div>
+
+    </div>
+
+    <hr>
+
+    <div class="row d-flex align-items-center">
+
+      <div class="col-md-7 col-lg-8">
+
+        <!--Copyright-->
+        <p class="text-center text-md-left">© 2020 Copyright:
+            <strong> Stephen Ditta </strong>
+        </p>
+
+      </div>
+
+      <div class="col-md-5 col-lg-4 ml-lg-0">
+
+        <div class="text-center text-md-right">
+          <ul class="list-unstyled list-inline">
+            <li class="list-inline-item">
+              <a class="btn-floating btn-sm rgba-white-slight mx-1">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn-floating btn-sm rgba-white-slight mx-1">
+                <i class="fab fa-twitter"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn-floating btn-sm rgba-white-slight mx-1">
+                <i class="fab fa-google-plus-g"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn-floating btn-sm rgba-white-slight mx-1">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+</div>
+<!-- End Footer -->
+    
+
 </body>
 </html>
