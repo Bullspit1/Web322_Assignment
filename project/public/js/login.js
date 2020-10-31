@@ -9,11 +9,11 @@ function validateEmail(){
     if(email.value === "" || !emailRegEx.test(email.value)){
         email.className = "form-control is-invalid";
         errMsg.innerHTML = "Email is incorrect.";
+        errMsg.style.color = "#dc3545";
         return false;
     }
         email.className = "form-control is-valid";
         errMsg.innerHTML = "";
-        errMsg.color = "#dc3545";
         return true;
 }
 
@@ -23,12 +23,12 @@ function validatePassword(){
 
     if(pass.value === "" || pass.value.length < 6 || pass.value.length > 12){
         pass.className = "form-control is-invalid";
-        errMsg.innerHTML = "Password must be between 6 and 12 characters.";
+        errMsg.innerHTML = "Password must be between 6 and 12 characters.";   
+        errMsg.style.color = "#dc3545";
         return false;
     }
     pass.className = "form-control is-valid";
     errMsg.innerHTML = "";
-    errMsg.color = "#dc3545";
     return true;
 }
 
@@ -44,12 +44,3 @@ function validForm() {
   
     return fullyValid;
   }
-
-
-
-
-
-
-// window.onload = function(){
-
-// }
