@@ -41,8 +41,6 @@ app.get("/", function(req,res){ //home
       data: room,
       layout: false // do not use the default Layout (main.hbs)
   });
-
-    //res.sendFile(path.join(__dirname,"../client/html/room_listing_page.hbs"));
   });
 
   app.get("/registration", function(req,res){ //registration
