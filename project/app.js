@@ -5,25 +5,37 @@ var path = require("path");//path
 
 const exphbs = require('express-handlebars');//express-handlebars
 
+var bodyParser = require('body-parser');//express body-parser
+
 var room = require('./public/js/rooms.json'); //import rooms.json file
 
 var HTTP_PORT = process.env.PORT || 8080;
+
+app.use(bodyParser.urlencoded({ extended: true })); //middleware for urlencoded form data
+
+//express-handlebar engine
+app.engine('.hbs', exphbs()); 
+app.set('view engine', '.hbs');
 
 function onHttpStart() {
   console.log("Express http server listening on: " + HTTP_PORT);
 }
 
-app.engine('.hbs', exphbs()); //express-handlebar engine
-app.set('view engine', '.hbs');
+app.use(express.static('./public'));
 
 app.get("/", function(req,res){ //home
-    app.use(express.static('./public'));
     res.sendFile(path.join(__dirname,"/views/home_page.html"));
   });
 
+  //POST 
+  app.post("/", function(req,res){
+
+    res.send("Hello, you booked a room for " + req.body.guests + " in " + req.body.location + " from " + req.body.checkin + " to " + req.body.checkout);
+
+  })
+
 
   app.get("/roomlisting", function(req,res){ //roomlisting
-    app.use(express.static('./public'));
 
   res.render('room_listing_page', {
       data: room,
@@ -34,13 +46,23 @@ app.get("/", function(req,res){ //home
   });
 
   app.get("/registration", function(req,res){ //registration
-    app.use(express.static('./public'));
     res.sendFile(path.join(__dirname,"/views/registration_page.html"));
   });
 
+  //POST 
+  app.post("/registration", function(req,res){
+
+    res.send("Hello " + req.body.firstName + " " + req.body.lastName + " with birth date of " + req.body.month + " " + req.body.day + ", " + req.body.year);
+
+  })
+
+
   app.get("/login", function(req,res){ //login
-    app.use(express.static('./public'));
     res.sendFile(path.join(__dirname,"/views/login.html"));
+  });
+
+  app.post("/dashboard", function(req,res){ //login dashboard
+    res.sendFile(path.join(__dirname,"/views/dashboard.html"));
   });
  
 
