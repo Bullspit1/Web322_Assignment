@@ -137,6 +137,10 @@ margin-bottom: 5vw;
     object-position: 50% 100%;
 }
 
+.img-contain.about{
+    height: 350px;
+}
+
 .img-pos{
     object-position: 50% 50%;
 }
