@@ -1,3 +1,8 @@
+// Stephen Ditta
+// scditta@myseneca.ca
+// WEB322NBB
+// Sharmin Ahmed
+
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 window.onload = function(){

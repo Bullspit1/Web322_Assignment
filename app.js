@@ -1,3 +1,10 @@
+/*
+Stephen Ditta
+scditta@myseneca.ca
+WEB322NBB
+Sharmin Ahmed 
+*/
+
 var express = require("express");
 var app = express();
 

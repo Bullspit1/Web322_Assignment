@@ -1,3 +1,10 @@
+/*
+Stephen Ditta
+scditta@myseneca.ca
+WEB322NBB
+Sharmin Ahmed 
+*/
+
 .my-container {
     position: relative;
     text-align: center;
@@ -10,7 +17,6 @@
     object-fit: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* background-size: cover; */
     max-height: 59em;
     min-height: 59em;
 }
@@ -26,21 +32,16 @@
 }
 
 .form{
-    /* height: 4em; */
     height: 100%;
     width: 100%;
-    /* top: 5em; */
     position: absolute;
     z-index: 1;
 }
 
 .form-container{
-    /* display: block; */
-    /* vertical-align: middle; */
     position: relative;
     top: 15%;
     width: 40vw;
-    /* margin: auto; */
     background-color: white;
     border-radius: .50rem;
     max-width: 800px;
@@ -119,12 +120,6 @@ video {
     transition: 1s opacity;
     object-fit: cover;
 }
-
-/* .info-container{
-    position: relative;
-    background-color: white;
-    height: 500px;
-} */
 
 .info-container{
 margin-top: 5vw;

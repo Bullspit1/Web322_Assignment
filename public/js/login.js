@@ -1,4 +1,9 @@
+// Stephen Ditta
+// scditta@myseneca.ca
+// WEB322NBB
+// Sharmin Ahmed
 
+//validate email function 
 function validateEmail(){
     let email = document.getElementById("email");
     let errMsg = document.getElementsByClassName("errMsg")[0];
@@ -17,6 +22,7 @@ function validateEmail(){
         return true;
 }
 
+//validate password function 
 function validatePassword(){
     let pass = document.getElementById("password");
     let errMsg = document.getElementsByClassName("errMsg")[1];
@@ -32,6 +38,7 @@ function validatePassword(){
     return true;
 }
 
+//validation form function returning either true or false
 function validForm() {
     let fullyValid = true;
 
