@@ -14,6 +14,8 @@ const exphbs = require('express-handlebars');//express-handlebars
 
 var bodyParser = require('body-parser');//express body-parser for text only
 
+const Sequelize = require('sequelize'); //import sequelize
+
 var room = require('./public/js/rooms.json'); //import rooms.json file
 
 var HTTP_PORT = process.env.PORT || 8080;
@@ -30,6 +32,31 @@ function onHttpStart() {
 
 //setup the static folder that static resources can load from
 app.use(express.static('./public'));
+
+
+
+// ------------------------------set up sequelize----------------------------------
+var sequelize = new Sequelize('d1bg2rr3q9i2d6', 'lwihdthkemunnz', '42b1c81b9384a4c0519f7127089cde444e962a3b712e6dd26162a997d010b960', {
+  host: 'ec2-54-164-134-207.compute-1.amazonaws.com',
+  dialect: 'postgres',
+  port: 5432,
+  dialectOptions: {
+      ssl: { rejectUnauthorized: false }
+  }
+});
+
+sequelize
+  .authenticate()
+  .then(function() {
+      console.log('Connection has been established successfully.');
+  })
+  .catch(function(err) {
+      console.log('Unable to connect to the database:', err);
+  });
+
+
+// ------------------------------sequelize end----------------------------------
+
 
 //setup a route on home (/)
 app.get("/", function(req,res){ //home
