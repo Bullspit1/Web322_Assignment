@@ -56,8 +56,11 @@ Sharmin Ahmed
 
 
 <div class="container-sm white-container">
-  <form class="form-custom" method="POST" action="/dashboard" onsubmit="return validForm();"> 
+  <form class="form-custom" method="POST" action="/login" onsubmit="return validForm();"> 
     <h3>Log In</h3>
+    {{#if logInError}}
+    <small style="color: red;">The email or password is incorrect.</small>
+    {{/if}}
     <div class="form-group">
       <label for="email">Email address</label>
       <input type="email" placeholder="example@gmail.com" class="form-control" id="email" aria-describedby="enterEmail" name="email">

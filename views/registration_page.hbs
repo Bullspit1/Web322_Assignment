@@ -58,6 +58,12 @@ Sharmin Ahmed
 <div class="container-sm white-container">
   <form class="form-custom" method="POST" action="/registration"> 
     <h3>Sign Up</h3>
+    {{#if userTakenError}}
+    <small style="color: red;">There is an account with that email already. Please try a new email or log in <a href="/login">here</a></small>
+    {{/if}}
+    {{#if pLengthError}}
+    <small style="color: red;">The password has to be between 6 and 12 characters!</small>
+    {{/if}}
     <div class="form-group">
       <label for="email">Email address</label>
       <input type="email" placeholder="example@gmail.com" class="form-control" id="email" aria-describedby="enterEmail" name="email" required>
