@@ -81,38 +81,25 @@ app.get("/", function(req,res){
   //setup a route on roomlisting
   app.get("/roomlisting", function(req, res){ //roomlisting
 
-  //const noUser =  req.session.theUser === undefined || req.session.theUser === NULL;
-    // Rooms.find((err, rooms) => {
-    //   // function getRoomListings(){
-    //   //   for(let i = 0; i < result.length; i++{
-          
-    //   //   }
-    //   // }
-    //   if(err){
-    //     console.log(err);
-    //   }else{
-    //     console.log(rooms);
-    //     res.render('room_listing_page', {
-    //       user: req.session.theUser,
-    //       data: rooms,
-    //       layout: false // do not use the default Layout (main.hbs)
-    //     });
-    //   }
-    // });
+    Rooms.find({}).lean().exec((err, rooms) => {
+      if(!rooms){
+        res.render('room_listing_page', {
+          user: req.session.theUser,
+          error: "There are no room listings at the moment",
+          layout: false // do not use the default Layout (main.hbs)
+        });
+      }
+      if(err){
+        res.render('room_listing_page', {
+          user: req.session.theUser,
+          error: err,
+          layout: false // do not use the default Layout (main.hbs)
+        });
+      }
 
-    // Rooms.find({}).then({
-    //     console.log(rooms);
-    //     res.render('room_listing_page', {
-    //       user: req.session.theUser,
-    //       data: rooms,
-    //       layout: false // do not use the default Layout (main.hbs)
-    //     });
-    // });
-
-    Rooms.find({}).then(rooms => {
       res.render('room_listing_page', {
         user: req.session.theUser,
-        data: rooms[0],
+        data: rooms,
         layout: false // do not use the default Layout (main.hbs)
       });
     });
