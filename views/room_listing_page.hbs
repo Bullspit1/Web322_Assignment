@@ -44,6 +44,7 @@ Sharmin Ahmed
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{#if user}} {{user.firstname}} {{user.lastname}} {{else}}Sign up / Login{{/if}}</a>
               <div class="dropdown-menu">
                 {{#if user}}
+                <a class="dropdown-item" href="/dashboard">Dashboard</a>
                 <a class="dropdown-item" href="/logout">Log Out</a>
                 {{else}}
                 <a class="dropdown-item" href="/registration">Sign Up</a>
@@ -60,14 +61,17 @@ Sharmin Ahmed
 <div class="container white-container">
   <h4>Rooms</h4>
   <div class="card-columns">
-
 {{#each data}}
     <div class="card p-3">
-      <img class="card-img-top" src={{img}} alt="Card image cap">
+      <img class="card-img-top" src=`../public/roomImages/{{this.roomphoto[0]}}` alt="Card image cap">
+      {{!-- {{#each this}} --}}
+      <h5 class="card-title">{{this.[0].roomtitle}}</h5>
+      
       <div class="card-body">
-        <h5 class="card-title">{{name}}</h5>
-        <p class="card-text">{{desc}}</p>
+        <h5 class="card-title">{{this.roomtitle}}</h5>
+        <p class="card-text">{{this.description}}</p>
       </div>
+      {{!-- {{/each}} --}}
       <div class="card-footer">
         <small class="text-muted">${{price}} CAD/night</small>
       </div>

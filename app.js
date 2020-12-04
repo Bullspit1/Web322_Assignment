@@ -13,14 +13,16 @@ const path = require("path");//path
 const exphbs = require('express-handlebars');//express-handlebars
 
 const bodyParser = require('body-parser');//express body-parser for text only
+const multer = require("multer"); //express multer for text and images
 
 const clientSessions = require("client-sessions");//client-sessions
 //const session = require('express-session')//express-session
 
-const room = require('./public/js/rooms.json'); //import rooms.json file
+//const room = require('./public/js/rooms.json'); //import rooms.json file //Removed
 
 const mongoose = require("mongoose");
 const Users = require('./models/Users'); //import mongoUsers
+const Rooms = require('./models/roomData'); //import mongoUsers
 const { db } = require("./models/Users");
 
 const HTTP_PORT = process.env.PORT || 8080;
@@ -43,7 +45,7 @@ app.use(express.static('./public'));
 app.use(clientSessions({
   cookieName: "session",
   secret: "assignment",
-  duration: .5 * 60 * 1000,
+  duration: 2 * 60 * 1000,
   activeDuration: 1000 * 60
 }));
 
@@ -65,7 +67,6 @@ app.use(clientSessions({
 app.get("/", function(req,res){
     res.render('home_page', {
       user: req.session.theUser,
-      data: room,
       layout: false // do not use the default Layout (main.hbs)
   });
   });
@@ -78,15 +79,44 @@ app.get("/", function(req,res){
 
   //---------------------------------------------- roomlisting -------------------------------------------------------
   //setup a route on roomlisting
-  app.get("/roomlisting", function(req,res){ //roomlisting
+  app.get("/roomlisting", function(req, res){ //roomlisting
 
   //const noUser =  req.session.theUser === undefined || req.session.theUser === NULL;
+    // Rooms.find((err, rooms) => {
+    //   // function getRoomListings(){
+    //   //   for(let i = 0; i < result.length; i++{
+          
+    //   //   }
+    //   // }
+    //   if(err){
+    //     console.log(err);
+    //   }else{
+    //     console.log(rooms);
+    //     res.render('room_listing_page', {
+    //       user: req.session.theUser,
+    //       data: rooms,
+    //       layout: false // do not use the default Layout (main.hbs)
+    //     });
+    //   }
+    // });
 
-  res.render('room_listing_page', {
-      user: req.session.theUser,
-      data: room,
-      layout: false // do not use the default Layout (main.hbs)
-  });
+    // Rooms.find({}).then({
+    //     console.log(rooms);
+    //     res.render('room_listing_page', {
+    //       user: req.session.theUser,
+    //       data: rooms,
+    //       layout: false // do not use the default Layout (main.hbs)
+    //     });
+    // });
+
+    Rooms.find({}).then(rooms => {
+      res.render('room_listing_page', {
+        user: req.session.theUser,
+        data: rooms[0],
+        layout: false // do not use the default Layout (main.hbs)
+      });
+    });
+  
   });
 //---------------------------------------------- roomlisting -------------------------------------------------------
 
@@ -130,14 +160,14 @@ app.get("/", function(req,res){
     loginUser.save((err) => {
       if(err) {
         console.log("There was an error saving the user");
-        //if error saving room
+        //if error saving user
         res.render('registration_page', {
           userTakenError: true,
           pLengthError: false,
           layout: false // do not use the default Layout (main.hbs)
       });
       } else {
-        console.log("The user was saved to the userlogins collection");
+        console.log("The user was saved to the users collection");
 
         res.redirect('/login');
       }
@@ -198,6 +228,7 @@ app.get("/", function(req,res){
                 email:  theUser.email,
                 password: theUser.password,
                 dateOfBirth: theUser.dateOfBirth,
+                admin: theUser.admin
               }
 
               //delete the password (dont want to send to the client)
@@ -227,8 +258,19 @@ app.get("/", function(req,res){
   //---------------------------------------------- login -------------------------------------------------------
 
   
-  //---------------------------------------------- dashboard -------------------------------------------------------
-  //middleware
+  //---------------------------------------------- Multer -------------------------------------------------------
+  const storage = multer.diskStorage({
+    destination: "./public/roomImages",
+    filename: function(req, file, cb){
+      cb(null, Date.now() + file.originalname);
+    }
+  });
+
+  const upload = multer({ storage: storage });
+  //---------------------------------------------- Multer -------------------------------------------------------
+
+
+  //middleware ensureLogin if the session does not have a user redirect them to the login page
   function ensureLogin(req, res, next) {
     if (!req.session.theUser) {
       res.redirect("/login");
@@ -236,6 +278,8 @@ app.get("/", function(req,res){
       next();
     }
   }
+  
+  //---------------------------------------------- dashboard -------------------------------------------------------
 
   //GET dashboard
   app.get("/dashboard", ensureLogin, function(req,res){ //registration
@@ -244,11 +288,70 @@ app.get("/", function(req,res){
       user: req.session.theUser,
       layout: false // do not use the default Layout (main.hbs)
   });
+
   });
 
   //POST dashboard
-  app.post("/dashboard", function(req,res){ //login dashboard
+  app.post("/dashboard", ensureLogin, upload.array("photos"), function(req,res){ //login dashboard
     //res.sendFile(path.join(__dirname,"/views/dashboard.html"));
+
+    const v_roomtitle = req.body.title;
+    const v_price = req.body.price;
+    const v_description = req.body.desc;
+    const v_location = req.body.location;
+    const v_photos = req.body.photos;
+
+    if(v_roomtitle === "" || v_price < 0 || v_location === ""){
+      return res.render('dashboard', {
+        error: "Please provide information (Room name and location)",
+        user: req.session.theUser,
+        layout: false // do not use the default Layout (main.hbs)
+      });
+    }
+
+    if(req.files.length > 10){
+      return res.render('dashboard', {
+        error: "Only 10 files are allowed",
+        user: req.session.theUser,
+        layout: false // do not use the default Layout (main.hbs)
+      });
+    }
+
+    //populate the roomphoto with images (pushes each file path included to photoArr and return it)
+    function getArrayOfImg(){
+      let photoArr = [];
+      for(let i = 0; i < req.files.length; i++){
+        photoArr.push(req.files[i].filename);
+      }
+      return photoArr;
+    }
+
+    var createRoom = new Rooms({
+      roomtitle: v_roomtitle,
+      price: v_price,
+      description: v_description,
+      location: v_location,
+      roomphoto: getArrayOfImg(), //array of strings(room photo links)
+      ownername: req.session.theUser.firstname + " " + req.session.theUser.lastname,
+      owneremail: req.session.theUser.email
+    });
+
+    createRoom.save((err) => {
+      if(err) {
+        console.log("There was an error saving the room");
+        //if error saving room
+      //   res.render('registration_page', {
+      //     userTakenError: true,
+      //     pLengthError: false,
+      //     layout: false // do not use the default Layout (main.hbs)
+      // });
+      } else {
+        console.log("The room was saved to the rooms collection");
+
+        res.redirect('/roomlisting');
+      }
+    });
+
   });
  //---------------------------------------------- dashboard -------------------------------------------------------
 

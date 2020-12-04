@@ -44,6 +44,7 @@ Sharmin Ahmed
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{#if user}} {{user.firstname}} {{user.lastname}} {{else}}Sign up / Login{{/if}}</a>
               <div class="dropdown-menu">
                 {{#if user}}
+                <a class="dropdown-item" href="/dashboard">Dashboard</a>
                 <a class="dropdown-item" href="/logout">Log Out</a>
                 {{else}}
                 <a class="dropdown-item" href="/registration">Sign Up</a>
