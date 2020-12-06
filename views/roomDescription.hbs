@@ -15,16 +15,17 @@ Sharmin Ahmed
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
 
-    <link rel="stylesheet" href="css/room_listing_page.css">
-    <script type="text/javascript" src="js/roomListing.js"></script>
+    <link rel="stylesheet" href="css/registration_page.css">
+    <script type="text/javascript" src="js/login.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>    
-    <title>Room Listings</title>
+    <title>Login</title>
 </head>
 <body>
     <!-- Nav bar -->
+    <div class="nav-container">
     <nav class="navbar fixed-top navbar-expand-sm navbar-light">
         <a class="navbar-brand" href="/">
             A Place To Stay
@@ -35,49 +36,27 @@ Sharmin Ahmed
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav nav-pills justify-content-end ml-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/">Home</a>
+              <a class="nav-link" href="/">Home </a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/roomlisting">Room Listing <span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+                <a class="nav-link" href="/roomlisting">Room Listing</a>
               </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{#if user}} {{user.firstname}} {{user.lastname}} {{else}}Sign up / Login{{/if}}</a>
+            <li class="nav-item dropdown active">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sign up / Login <span class="sr-only">(current)</span></a>
               <div class="dropdown-menu">
-                {{#if user}}
-                <a class="dropdown-item" href="/dashboard">Dashboard</a>
-                <a class="dropdown-item" href="/logout">Log Out</a>
-                {{else}}
                 <a class="dropdown-item" href="/registration">Sign Up</a>
                 <a class="dropdown-item" href="/login">Log In</a>
-                {{/if}}
               </div>
             </li>
           </ul>
         </div>
       </nav>
+    </div>
     <!-- End Nav Bar -->
 
-    <!-- Content -->
-<div class="container white-container">
-  <h4>Rooms</h4>
-  {{#if data}}
-  <div class="card-columns">
-{{#each data}}
-    <div class="card p-3" id={{_id}}>
-      <img class="card-img-top" src="/roomImages/{{roomphoto.[0]}}" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">{{roomtitle}}</h5>
-        <p class="card-text">{{description}}</p>
-      </div>
-      <div class="card-footer">
-        <small class="text-muted">${{price}} CAD/night</small>
-      </div>
-    </div>
-{{/each}}
-  </div>
-  {{/if}}
-</div>
-    <!-- End Content -->
+
+
+
 
 <!-- Footer -->
 <div class="white-container nobot">

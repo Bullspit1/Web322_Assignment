@@ -23,9 +23,29 @@ const clientSessions = require("client-sessions");//client-sessions
 const mongoose = require("mongoose");
 const Users = require('./models/Users'); //import mongoUsers
 const Rooms = require('./models/roomData'); //import mongoUsers
-const { db } = require("./models/Users");
+
+const fs = require('fs')
 
 const HTTP_PORT = process.env.PORT || 8080;
+
+//---------------------------------------------- Mongo Connection -------------------------------------------------------
+
+//mongo connection
+const password = encodeURIComponent("9TbtxsEYVY");
+mongoose.connect(`mongodb+srv://Stephen:${password}@assignmentusers.jqq5a.mongodb.net/assignment?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
+
+//(debugging) -- checks if the database is connected
+const db = mongoose.connection
+db.once('open', _ => {
+  console.log('Database connected:', `mongodb+srv://Stephen:${password}@assignmentusers.jqq5a.mongodb.net/assignment?retryWrites=true&w=majority`)
+})
+db.on('error', err => {
+  console.error('connection error:', err)
+})
+
+//---------------------------------------------- Mongo Connection -------------------------------------------------------
+
+
 
 function onHttpStart() {
   console.log("Express http server listening on: " + HTTP_PORT);
@@ -49,15 +69,6 @@ app.use(clientSessions({
   activeDuration: 1000 * 60
 }));
 
-// app.set('trust proxy', 1) // trust first proxy
-
-//   app.use(session({
-//     secret: "assignment",
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: { secure: true }
-//   }));
-
 //---------------------------------------------- clientSession -------------------------------------------------------
 
 
@@ -72,8 +83,12 @@ app.get("/", function(req,res){
   });
 
   //POST (/)
-  app.post("/", function(req,res){
-    res.send("Hello, you booked a room for " + req.body.guests + " in " + req.body.location + " from " + req.body.checkin + " to " + req.body.checkout);
+  app.post("/", async function(req,res){
+    res.render('room_listing_page', {
+      user: req.session.theUser,
+      data: await Rooms.find({location : req.body.location}).lean(),
+      layout: false // do not use the default Layout (main.hbs)
+  });
   });
 //---------------------------------------------- home -------------------------------------------------------
 
@@ -83,14 +98,14 @@ app.get("/", function(req,res){
 
     Rooms.find({}).lean().exec((err, rooms) => {
       if(!rooms){
-        res.render('room_listing_page', {
+        return res.render('room_listing_page', {
           user: req.session.theUser,
           error: "There are no room listings at the moment",
           layout: false // do not use the default Layout (main.hbs)
         });
       }
       if(err){
-        res.render('room_listing_page', {
+        return res.render('room_listing_page', {
           user: req.session.theUser,
           error: err,
           layout: false // do not use the default Layout (main.hbs)
@@ -265,21 +280,31 @@ app.get("/", function(req,res){
       next();
     }
   }
+
+  //populate the roomphoto with images (pushes each file path included to photoArr and return it)
+  function getArrayOfImg(req){
+    let photoArr = [];
+    for(let i = 0; i < req.files.length; i++){
+      photoArr.push(req.files[i].filename);
+    }
+    return photoArr;
+  }
   
   //---------------------------------------------- dashboard -------------------------------------------------------
 
   //GET dashboard
-  app.get("/dashboard", ensureLogin, function(req,res){ //registration
+  app.get("/dashboard", ensureLogin, async function(req,res){ //registration
     //res.sendFile(path.join(__dirname,"/views/registration_page.hbs"));
     res.render('dashboard', {
       user: req.session.theUser,
+      room: await Rooms.find().lean(),
       layout: false // do not use the default Layout (main.hbs)
   });
 
   });
 
   //POST dashboard
-  app.post("/dashboard", ensureLogin, upload.array("photos"), function(req,res){ //login dashboard
+  app.post("/dashboard", ensureLogin, upload.array("photos"), async function(req,res){ //login dashboard
     //res.sendFile(path.join(__dirname,"/views/dashboard.html"));
 
     const v_roomtitle = req.body.title;
@@ -292,6 +317,7 @@ app.get("/", function(req,res){
       return res.render('dashboard', {
         error: "Please provide information (Room name and location)",
         user: req.session.theUser,
+        room: await Rooms.find({}).lean(),
         layout: false // do not use the default Layout (main.hbs)
       });
     }
@@ -300,17 +326,9 @@ app.get("/", function(req,res){
       return res.render('dashboard', {
         error: "Only 10 files are allowed",
         user: req.session.theUser,
+        room: await Rooms.find({}).lean(),
         layout: false // do not use the default Layout (main.hbs)
       });
-    }
-
-    //populate the roomphoto with images (pushes each file path included to photoArr and return it)
-    function getArrayOfImg(){
-      let photoArr = [];
-      for(let i = 0; i < req.files.length; i++){
-        photoArr.push(req.files[i].filename);
-      }
-      return photoArr;
     }
 
     var createRoom = new Rooms({
@@ -318,7 +336,7 @@ app.get("/", function(req,res){
       price: v_price,
       description: v_description,
       location: v_location,
-      roomphoto: getArrayOfImg(), //array of strings(room photo links)
+      roomphoto: getArrayOfImg(req), //array of strings(room photo links)
       ownername: req.session.theUser.firstname + " " + req.session.theUser.lastname,
       owneremail: req.session.theUser.email
     });
@@ -327,20 +345,59 @@ app.get("/", function(req,res){
       if(err) {
         console.log("There was an error saving the room");
         //if error saving room
-      //   res.render('registration_page', {
-      //     userTakenError: true,
-      //     pLengthError: false,
-      //     layout: false // do not use the default Layout (main.hbs)
-      // });
+        res.render('registration_page', {
+          error: err,
+          user: req.session.theUser,
+          layout: false // do not use the default Layout (main.hbs)
+      });
       } else {
         console.log("The room was saved to the rooms collection");
 
         res.redirect('/roomlisting');
       }
     });
+  });
+
+
+  app.post("/dashboardUpdate", ensureLogin, upload.array("photos"), async function(req, res) {
+
+    const v_roomID = req.body.roomID;
+
+    const v_roomtitle = req.body.title;
+    const v_price = req.body.price;
+    const v_description = req.body.desc;
+    const v_location = req.body.location;
+    const v_photos = req.body.photos;
+    const v_ownName = req.session.theUser.firstname + " " + req.session.theUser.lastname;
+    const v_ownEmail = req.session.theUser.email;
+
+    Rooms.findByIdAndUpdate(v_roomID, {$set: {roomtitle : v_roomtitle, price : v_price, description : v_description, location : v_location, roomphoto : getArrayOfImg(req), ownername : v_ownName, owneremail : v_ownEmail}}, function(err, updRoom){
+      if(err){
+        console.log(err);
+      }else{
+        console.log("update successful:" + updRoom);
+        //loop through array of images and remove the previous images before updating with new one
+        for(let i = 0; i < updRoom.roomphoto.length; i++){
+          fs.unlinkSync(__dirname +  "/public/roomImages/" + updRoom.roomphoto[i]);
+        }
+        res.redirect('/roomlisting');
+      }
+    });
 
   });
  //---------------------------------------------- dashboard -------------------------------------------------------
+
+
+
+//---------------------------------------------- Room -------------------------------------------------------
+
+app.put("/roomDescription/:_id", ensureLogin, async function(req,res){ //registration
+  res.send("get user with Id: " + req.params._id);
+});
+
+
+
+//---------------------------------------------- Room -------------------------------------------------------
 
 
 
