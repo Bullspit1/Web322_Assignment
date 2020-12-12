@@ -32,7 +32,6 @@ const HTTP_PORT = process.env.PORT || 8080;
 //---------------------------------------------- Mongo Connection -------------------------------------------------------
 
 //mongo connection
-//const password = encodeURIComponent("9TbtxsEYVY");
 mongoose.connect(`mongodb+srv://Stephen:9TbtxsEYVY@assignmentusers.jqq5a.mongodb.net/assignment?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
 
 //(debugging) -- checks if the database is connected
@@ -323,7 +322,7 @@ app.get("/", function(req,res){
   });
 
 
-  app.post("/dashboardUpdate", ensureLogin, upload.single("photos"), async function(req, res) {
+  app.post("/dashboardUpdate", ensureLogin, upload.single("photos"), function(req, res) {
 
     const v_roomID = req.body.roomID;
 
@@ -335,7 +334,7 @@ app.get("/", function(req,res){
     const v_ownName = req.session.theUser.firstname + " " + req.session.theUser.lastname;
     const v_ownEmail = req.session.theUser.email;
 
-    Rooms.findByIdAndUpdate(v_roomID, {$set: {roomtitle : v_roomtitle, price : v_price, description : v_description, location : v_location, roomphoto : req.file.filename, ownername : v_ownName, owneremail : v_ownEmail}}, function(err, updRoom){
+    Rooms.findByIdAndUpdate({v_roomID}, {$set: {roomtitle : v_roomtitle, price : v_price, description : v_description, location : v_location, roomphoto : req.file.filename, ownername : v_ownName, owneremail : v_ownEmail}}, function(err, updRoom){
       if(err){
         console.log(err);
       }else{
@@ -343,6 +342,20 @@ app.get("/", function(req,res){
         fs.unlinkSync(__dirname +  "/public/roomImages/" + updRoom.roomphoto);
         res.redirect('/roomlisting');
       }
+    });
+
+  });
+
+  app.post("/dashboardRemove", ensureLogin, function(req, res) {
+
+    const v_roomID = req.body.roomID;
+
+
+    Rooms.deleteOne({_id : v_roomID})
+    .exec()
+    .then(() => {
+      console.log("Deleted");
+      res.redirect('/roomlisting');
     });
 
   });
