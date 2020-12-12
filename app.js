@@ -32,13 +32,13 @@ const HTTP_PORT = process.env.PORT || 8080;
 //---------------------------------------------- Mongo Connection -------------------------------------------------------
 
 //mongo connection
-const password = encodeURIComponent("9TbtxsEYVY");
-mongoose.connect(`mongodb+srv://Stephen:${password}@assignmentusers.jqq5a.mongodb.net/assignment?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
+//const password = encodeURIComponent("9TbtxsEYVY");
+mongoose.connect(`mongodb+srv://Stephen:9TbtxsEYVY@assignmentusers.jqq5a.mongodb.net/assignment?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
 
 //(debugging) -- checks if the database is connected
 const db = mongoose.connection
 db.once('open', _ => {
-  console.log('Database connected:', `mongodb+srv://Stephen:${password}@assignmentusers.jqq5a.mongodb.net/assignment?retryWrites=true&w=majority`)
+  console.log('Database connected:', `mongodb+srv://Stephen:9TbtxsEYVY@assignmentusers.jqq5a.mongodb.net/assignment?retryWrites=true&w=majority`)
 })
 db.on('error', err => {
   console.error('connection error:', err)
@@ -97,7 +97,9 @@ app.get("/", function(req,res){
   //setup a route on roomlisting
   app.get("/roomlisting", function(req, res){ //roomlisting
 
-    Rooms.find({}).lean().exec((err, rooms) => {
+    Rooms.find({})
+    .lean()
+    .exec((err, rooms) => {
       if(!rooms){
         return res.render('room_listing_page', {
           user: req.session.theUser,
