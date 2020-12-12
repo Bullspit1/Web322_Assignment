@@ -376,7 +376,7 @@ app.get("/", function(req,res){
 //---------------------------------------------- Room -------------------------------------------------------
 
 app.get("/roomdescription/:roomid", async function(req,res){ //room description 
-  res.render('roomdescription', {
+  res.render('roomDescription', {
     user: req.session.theUser,
     data: await Rooms.find({_id : req.params.roomid}).lean(),
     layout: false // do not use the default Layout (main.hbs)
