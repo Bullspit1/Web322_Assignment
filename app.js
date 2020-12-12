@@ -24,7 +24,7 @@ const mongoose = require("mongoose");
 const Users = require('./models/Users'); //import mongoUsers
 const Rooms = require('./models/roomData'); //import mongoUsers
 
-// const fs = require('fs');
+const fs = require('fs');
 const roomData = require("./models/roomData");
 
 const HTTP_PORT = process.env.PORT || 8080;
@@ -333,16 +333,6 @@ app.get("/", function(req,res){
     const v_photos = req.body.photos;
     const v_ownName = req.session.theUser.firstname + " " + req.session.theUser.lastname;
     const v_ownEmail = req.session.theUser.email;
-
-    // Rooms.findByIdAndUpdate({v_roomID}, {$set: {roomtitle : v_roomtitle, price : v_price, description : v_description, location : v_location, roomphoto : req.file.filename, ownername : v_ownName, owneremail : v_ownEmail}}, function(err, updRoom){
-    //   if(err){
-    //     console.log(err);
-    //   }else{
-    //     console.log("update successful:" + updRoom);
-    //     // fs.unlinkSync(__dirname +  "/public/roomImages/" + updRoom.roomphoto);
-    //     res.redirect('/roomlisting');
-    //   }
-    // });
 
     Rooms.updateOne({_id : v_roomID}, {$set: {roomtitle : v_roomtitle, price : v_price, description : v_description, location : v_location, roomphoto : req.file.filename}})
     .exec()
