@@ -9,9 +9,7 @@ var roomSchema = new Schema({
   "price": Number,
   "description": String,
   "location": String,
-  "roomphoto": String,
-  "ownername": String,
-  "owneremail": String
+  "roomphoto": String
 });
 
 module.exports = mongoose.model('Rooms', roomSchema);

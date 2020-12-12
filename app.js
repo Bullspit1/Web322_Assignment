@@ -344,7 +344,7 @@ app.get("/", function(req,res){
     //   }
     // });
 
-    Rooms.findByIdAndUpdate({v_roomID}, {$set: {roomtitle : v_roomtitle, price : v_price, description : v_description, location : v_location, roomphoto : req.file.filename, ownername : v_ownName, owneremail : v_ownEmail}})
+    Rooms.updateOne({_id : v_roomID}, {$set: {roomtitle : v_roomtitle, price : v_price, description : v_description, location : v_location, roomphoto : req.file.filename}})
     .exec()
     .then((result) =>{
       console.log(result);
