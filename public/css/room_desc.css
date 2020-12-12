@@ -12,3 +12,9 @@
     background-color: #246070;
     color: white;
 }
+
+.center_div{
+    padding-top: 46px;
+    margin: 0 auto;
+    width:80%;
+}

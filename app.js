@@ -350,7 +350,6 @@ app.get("/", function(req,res){
 
     const v_roomID = req.body.roomID;
 
-
     Rooms.deleteOne({_id : v_roomID})
     .exec()
     .then(() => {
@@ -365,7 +364,7 @@ app.get("/", function(req,res){
 
 //---------------------------------------------- Room -------------------------------------------------------
 
-app.get("/roomdescription/:_id", async function(req,res){ //registration
+app.get("/roomdescription/:_id", async function(req,res){ //room description 
   //res.send("get user with Id: " + req.params._id);
   res.render('roomdescription', {
     user: req.session.theUser,

@@ -67,12 +67,12 @@ Sharmin Ahmed
         <p class="card-text">{{description}}</p>
       </div>
       <div class="card-footer">
-        <small class="text-muted">${{price}} CAD/night</small>
+        <small>${{price}} CAD/night</small>
       </div>
 
 {{/each}}
 {{#if user}}
-{{user.firstname}}
+<div class="container center_div">
 <form class="form" name="bookroom" action="/bookroom" method="POST">
 <div class="row g-3">
   <div class="col">
@@ -94,6 +94,9 @@ Sharmin Ahmed
  <input type="hidden" id="priceRoom" name="priceRoom" value="{{data.[0].price}}">
 </div> <button type="submit" class="btn btn-primary">Book Room</button>
 </form>
+</div>
+{{else}}
+<h3>Please sign in to book a room</h3>
 {{/if}}
 </div>
 
