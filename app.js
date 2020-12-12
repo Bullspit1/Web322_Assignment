@@ -195,51 +195,48 @@ app.get("/", function(req,res){
     const m_lastname = req.body.lastname;
 
 
-    Users.findOne({email : m_email},
-    (err, theUser) => {
-      if(err){
-       console.log(err);
-      }
-
+    Users.findOne({email : m_email})
+    .exec()
+    .then((theUser) => {
       if(!theUser){
-        console.log("Email not found");
         return res.render('login', {
           logInError: true,
           layout: false // do not use the default Layout (main.hbs)
         });
-      }
-
-      //compares the password due to it being encrypted
-      theUser.comparePassword(m_password, 
-        (err, match) => {
-          if (err) {
-            throw err;
-          }
-
-            if(match){
-
-              req.session.theUser = {
-                firstname: theUser.firstname,
-                lastname: theUser.lastname,
-                email:  theUser.email,
-                password: theUser.password,
-                dateOfBirth: theUser.dateOfBirth,
-                admin: theUser.admin
-              }
-
-              //delete the password (dont want to send to the client)
-              delete req.session.theUser.password;
-
-              res.redirect("/dashboard");
-            }else{
-              console.log("user and pass not found");
-              return res.render('login', {
-                logInError: true,
-                layout: false // do not use the default Layout (main.hbs)
-              });
+      }else{
+        //compares the password due to it being encrypted
+        theUser.comparePassword(m_password, 
+          (err, match) => {
+            if (err) {
+              throw err;
             }
-        });
-    });
+
+              if(match){
+
+                req.session.theUser = {
+                  firstname: theUser.firstname,
+                  lastname: theUser.lastname,
+                  email:  theUser.email,
+                  password: theUser.password,
+                  dateOfBirth: theUser.dateOfBirth,
+                  admin: theUser.admin
+                }
+
+                //delete the password (dont want to send to the client)
+                delete req.session.theUser.password;
+
+                res.redirect("/dashboard");
+              }else{
+                console.log("user and pass not found");
+                return res.render('login', {
+                  logInError: true,
+                  layout: false // do not use the default Layout (main.hbs)
+                });
+              }
+          });
+      }
+    })
+
   });
   //---------------------------------------------- login -------------------------------------------------------
 
