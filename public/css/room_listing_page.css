@@ -20,3 +20,14 @@ Sharmin Ahmed
     padding: 3vw 0 0 0;
     background-color: white;
 }
+
+.card{
+    text-decoration: none !important;
+    color:black;
+    cursor: pointer;
+}
+
+.card:hover{
+    text-decoration: none !important;
+    color:rgb(172, 158, 158);
+}

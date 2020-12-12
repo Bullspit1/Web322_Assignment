@@ -24,7 +24,8 @@ const mongoose = require("mongoose");
 const Users = require('./models/Users'); //import mongoUsers
 const Rooms = require('./models/roomData'); //import mongoUsers
 
-const fs = require('fs')
+const fs = require('fs');
+const roomData = require("./models/roomData");
 
 const HTTP_PORT = process.env.PORT || 8080;
 
@@ -128,7 +129,6 @@ app.get("/", function(req,res){
   //---------------------------------------------- registration -------------------------------------------------------
   //setup a route on registration
   app.get("/registration", function(req,res){ //registration
-    //res.sendFile(path.join(__dirname,"/views/registration_page.hbs"));
     res.render('registration_page', {
       userTakenError: false, 
       pLengthError: false,
@@ -174,9 +174,6 @@ app.get("/", function(req,res){
         res.redirect('/login');
       }
     });
-
-    //res.send("Hello " + req.body.firstName + " " + req.body.lastName + " with birth date of " + req.body.month + " " + req.body.day + ", " + req.body.year);
-
   });
   //---------------------------------------------- registration -------------------------------------------------------
 
@@ -184,14 +181,13 @@ app.get("/", function(req,res){
   //setup a route on login
   //---------------------------------------------- login -------------------------------------------------------
   app.get("/login", function(req,res){ //login
-    //res.sendFile(path.join(__dirname,"/views/login.html"));
     res.render('login', {
       logInError: false,
       layout: false // do not use the default Layout (main.hbs)
     });
   });
 
-  app.post("/login", function(req,res){ //TODO
+  app.post("/login", function(req,res){
 
     const m_email = req.body.email;
     const m_password = req.body.password;
@@ -219,10 +215,8 @@ app.get("/", function(req,res){
           if (err) {
             throw err;
           }
-            //console.log(m_password + ": " + match);
 
             if(match){
-             //console.log(theUser.firstname);
 
               req.session.theUser = {
                 firstname: theUser.firstname,
@@ -246,16 +240,6 @@ app.get("/", function(req,res){
             }
         });
     });
-
-    // const foundUser = Users.findOne ({ "email" : m_email });
-    // console.log(foundUser);
-
-    // if(username === user.username && password === user.password) {
-    //   req.session.user = {
-
-    //   }
-    // }
-
   });
   //---------------------------------------------- login -------------------------------------------------------
 
@@ -280,15 +264,6 @@ app.get("/", function(req,res){
       next();
     }
   }
-
-  //populate the roomphoto with images (pushes each file path included to photoArr and return it)
-  function getArrayOfImg(req){
-    let photoArr = [];
-    for(let i = 0; i < req.files.length; i++){
-      photoArr.push(req.files[i].filename);
-    }
-    return photoArr;
-  }
   
   //---------------------------------------------- dashboard -------------------------------------------------------
 
@@ -304,8 +279,7 @@ app.get("/", function(req,res){
   });
 
   //POST dashboard
-  app.post("/dashboard", ensureLogin, upload.array("photos"), async function(req,res){ //login dashboard
-    //res.sendFile(path.join(__dirname,"/views/dashboard.html"));
+  app.post("/dashboard", ensureLogin, upload.single("photos"), async function(req,res){ //login dashboard
 
     const v_roomtitle = req.body.title;
     const v_price = req.body.price;
@@ -322,21 +296,12 @@ app.get("/", function(req,res){
       });
     }
 
-    if(req.files.length > 10){
-      return res.render('dashboard', {
-        error: "Only 10 files are allowed",
-        user: req.session.theUser,
-        room: await Rooms.find({}).lean(),
-        layout: false // do not use the default Layout (main.hbs)
-      });
-    }
-
     var createRoom = new Rooms({
       roomtitle: v_roomtitle,
       price: v_price,
       description: v_description,
       location: v_location,
-      roomphoto: getArrayOfImg(req), //array of strings(room photo links)
+      roomphoto: req.file.filename, 
       ownername: req.session.theUser.firstname + " " + req.session.theUser.lastname,
       owneremail: req.session.theUser.email
     });
@@ -359,7 +324,7 @@ app.get("/", function(req,res){
   });
 
 
-  app.post("/dashboardUpdate", ensureLogin, upload.array("photos"), async function(req, res) {
+  app.post("/dashboardUpdate", ensureLogin, upload.single("photos"), async function(req, res) {
 
     const v_roomID = req.body.roomID;
 
@@ -371,15 +336,12 @@ app.get("/", function(req,res){
     const v_ownName = req.session.theUser.firstname + " " + req.session.theUser.lastname;
     const v_ownEmail = req.session.theUser.email;
 
-    Rooms.findByIdAndUpdate(v_roomID, {$set: {roomtitle : v_roomtitle, price : v_price, description : v_description, location : v_location, roomphoto : getArrayOfImg(req), ownername : v_ownName, owneremail : v_ownEmail}}, function(err, updRoom){
+    Rooms.findByIdAndUpdate(v_roomID, {$set: {roomtitle : v_roomtitle, price : v_price, description : v_description, location : v_location, roomphoto : req.file.filename, ownername : v_ownName, owneremail : v_ownEmail}}, function(err, updRoom){
       if(err){
         console.log(err);
       }else{
         console.log("update successful:" + updRoom);
-        //loop through array of images and remove the previous images before updating with new one
-        for(let i = 0; i < updRoom.roomphoto.length; i++){
-          fs.unlinkSync(__dirname +  "/public/roomImages/" + updRoom.roomphoto[i]);
-        }
+        fs.unlinkSync(__dirname +  "/public/roomImages/" + updRoom.roomphoto);
         res.redirect('/roomlisting');
       }
     });
@@ -391,8 +353,34 @@ app.get("/", function(req,res){
 
 //---------------------------------------------- Room -------------------------------------------------------
 
-app.put("/roomDescription/:_id", ensureLogin, async function(req,res){ //registration
-  res.send("get user with Id: " + req.params._id);
+app.get("/roomdescription/:_id", async function(req,res){ //registration
+  //res.send("get user with Id: " + req.params._id);
+  res.render('roomdescription', {
+    user: req.session.theUser,
+    data: await Rooms.find({_id : req.params._id}).lean(),
+    layout: false // do not use the default Layout (main.hbs)
+  });
+});
+
+
+app.post("/bookroom", function(req, res){
+const firstDate = new Date(req.body.checkin);
+const secondDate = new Date(req.body.checkout);
+const diff =  secondDate.getTime() - firstDate.getTime();
+const days = Math.ceil(diff / (1000 * 3600 * 24));
+
+const roomprice = req.body.priceRoom;
+
+res.render('bookingTicket', {
+  user: req.session.theUser,
+  firstD: firstDate.toDateString(),
+  lastD: secondDate.toDateString(),
+  totalD: days,
+  price: roomprice,
+  totalPriceD: days * roomprice,
+  layout: false // do not use the default Layout (main.hbs)
+});
+
 });
 
 
@@ -409,6 +397,8 @@ app.put("/roomDescription/:_id", ensureLogin, async function(req,res){ //registr
 });
 
  //---------------------------------------------- Logout -------------------------------------------------------
+
+
 
 
 

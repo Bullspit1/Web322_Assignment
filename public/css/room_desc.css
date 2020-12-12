@@ -1,0 +1,14 @@
+.white-container{
+    padding: 100px 0 3vw 0;
+    background-color: white;
+}
+
+.btn {
+    background-color: #418ba4;
+    color: white;
+}
+
+.btn:hover{
+    background-color: #246070;
+    color: white;
+}

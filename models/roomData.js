@@ -9,10 +9,7 @@ var roomSchema = new Schema({
   "price": Number,
   "description": String,
   "location": String,
-  "roomphoto": {
-      "type": [String],
-      "default" : undefined
-   }, //array of strings(room photo links)
+  "roomphoto": String,
   "ownername": String,
   "owneremail": String
 });
