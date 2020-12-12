@@ -364,11 +364,10 @@ app.get("/", function(req,res){
 
 //---------------------------------------------- Room -------------------------------------------------------
 
-app.get("/roomdescription/:_id", async function(req,res){ //room description 
-  //res.send("get user with Id: " + req.params._id);
+app.get("/roomdescription/:roomid", async function(req,res){ //room description 
   res.render('roomdescription', {
     user: req.session.theUser,
-    data: await Rooms.find({_id : req.params._id}).lean(),
+    data: await Rooms.find({_id : req.params.roomid}).lean(),
     layout: false // do not use the default Layout (main.hbs)
   });
 });
